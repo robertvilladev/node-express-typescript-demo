@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
 
 import { createApiResponse } from '@api-docs/openAPIResponseBuilders';
+import { ENDPOINTS } from '@common/consts';
 import { ResponseStatus, ServiceResponse } from '@common/models/serviceResponse';
 import { handleServiceResponse } from '@common/utils/httpHandlers';
 
@@ -14,8 +15,8 @@ export const healthCheckRouter: Router = (() => {
 
   healthCheckRegistry.registerPath({
     method: 'get',
-    path: '/health-check',
     tags: ['Health Check'],
+    path: ENDPOINTS.HEALTH_CHECK.BASE,
     responses: createApiResponse(z.null(), 'Success'),
   });
 

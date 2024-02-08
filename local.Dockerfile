@@ -12,6 +12,8 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-RUN chmod +x /app/scripts/docker/local-run.sh
+EXPOSE 3001
 
-EXPOSE 8080
+# RUN chmod +x /app/scripts/docker/local-run.sh
+CMD npm run start
+

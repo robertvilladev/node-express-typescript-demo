@@ -12,6 +12,7 @@ import rateLimiter from '@common/middleware/rateLimiter';
 import requestLogger from '@common/middleware/requestLogger';
 import { getCorsOrigin } from '@common/utils/envConfig';
 import { healthCheckRouter } from '@modules/healthCheck/healthCheckRouter';
+import { taskRouter } from '@modules/task/taskRouter';
 import { userRouter } from '@modules/user/userRouter';
 
 dotenv.config({
@@ -33,6 +34,7 @@ app.use(requestLogger());
 // Routes
 app.use(ENDPOINTS.HEALTH_CHECK.BASE, healthCheckRouter);
 app.use(ENDPOINTS.USERS.BASE, userRouter);
+app.use(ENDPOINTS.TASKS.BASE, taskRouter);
 
 // Swagger UI
 app.use(openAPIRouter);

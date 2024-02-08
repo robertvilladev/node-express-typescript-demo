@@ -3,6 +3,7 @@ import express, { Request, Response, Router } from 'express';
 import { z } from 'zod';
 
 import { createApiResponse } from '@api-docs/openAPIResponseBuilders';
+import { ENDPOINTS } from '@common/consts';
 import { handleServiceResponse, validateRequest } from '@common/utils/httpHandlers';
 import { userService } from '@modules/user/userService';
 
@@ -17,8 +18,8 @@ export const userRouter: Router = (() => {
 
   userRegistry.registerPath({
     method: 'get',
-    path: '/users',
     tags: ['User'],
+    path: ENDPOINTS.USERS.GET_USERS,
     responses: createApiResponse(z.array(UserSchema), 'Success'),
   });
 
@@ -29,8 +30,8 @@ export const userRouter: Router = (() => {
 
   userRegistry.registerPath({
     method: 'get',
-    path: '/users/{id}',
     tags: ['User'],
+    path: ENDPOINTS.USERS.GET_USER_BY_ID,
     request: { params: GetUserSchema.shape.params },
     responses: createApiResponse(UserSchema, 'Success'),
   });

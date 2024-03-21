@@ -7,17 +7,14 @@
     "ts:check": "tsc --noEmit",
     "dev": "tsx watch --clear-screen=false src/index.ts | pino-pretty",
     "build": "rimraf build && tsc",
-    "start": "NODE_ENV=production npm run build && tsx build/src/index.js",
+    "start": "set NODE_ENV=production npm run build && tsx build/src/index.js",
     "lint": "eslint --fix --ext .ts,.js src/ tests/",
     "format": "prettier --write 'src/**/*.{ts,js,json}' 'tests/**/*.{ts,js,json}'",
     "test": "jest",
-    "prepare": "husky install",
-    "docker:build": "docker-compose build --no-cache",
-    "docker:start": "docker-compose up",
-    "docker:stop": "docker-compose down"
+    "prepare": "husky install"
   },
   "dependencies": {
-    "@asteasolutions/zod-to-openapi": "^6.3.1",
+    "@asteasolutions/zod-to-openapi": "^6.4.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
@@ -56,10 +53,8 @@
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["npm run lint", "npm run format"],
-    "src/**/*.{ts,js,json}": "npm run format",
-    "tests/**/*.{ts,js,json}": "npm run format"
+    "src/**/*.{ts,js,json}": "npm run format"
   },
-  "author": "Edwin Hernandez",
-  "repository": "edwinhern/express-typescript-2024",
+  "author": "Robert Villa",
   "license": "ISC"
 }

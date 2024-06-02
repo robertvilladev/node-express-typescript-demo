@@ -14,6 +14,7 @@ import { getCorsOrigin } from '@common/utils/envConfig';
 import { healthCheckRouter } from '@modules/healthCheck/healthCheckRouter';
 import { taskRouter } from '@modules/task/taskRouter';
 
+// Environment variables
 dotenv.config({
   path: path.resolve(__dirname, '../.env'),
 });
@@ -29,6 +30,10 @@ app.use(rateLimiter);
 
 // Request logging
 app.use(requestLogger());
+
+// Body parsers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use(ENDPOINTS.HEALTH_CHECK.BASE, healthCheckRouter);

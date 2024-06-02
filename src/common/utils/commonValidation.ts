@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
 export const commonValidations = {
-  id: z
-    .string()
-    .refine((data) => !isNaN(Number(data)), 'ID must be a numeric value')
-    .transform(Number)
-    .refine((num) => num > 0, 'ID must be a positive number'),
-  // ... other common validations
+  objectIdSchema: z.string().refine((value) => /^[0-9a-fA-F]{24}$/.test(value), {
+    message: 'Invalid ObjectId',
+  }),
+  requiredStringSchema: z.string().min(1),
+  optionalStringSchema: z.string().optional(),
 };

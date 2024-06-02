@@ -4,9 +4,13 @@ import { z } from 'zod';
 extendZodWithOpenApi(z);
 
 export type Task = z.infer<typeof TaskSchema>;
+export type CreateTask = z.infer<typeof createTaskSchema>;
+export type TaskStatusType = z.infer<typeof TaskStatus>;
+
+export const TaskStatus = z.enum(['PENDING', 'IN_PROGRESS', 'COMPLETED']);
 
 export const TaskSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   image: z.string(),
   title: z.string(),
   description: z.string(),
@@ -15,10 +19,8 @@ export const TaskSchema = z.object({
 
   // Optional fields
   dueDate: z.date().optional(),
-  completed: z.boolean().optional().default(false),
+  status: TaskStatus.optional().default('PENDING'),
 });
 
-// Input Validation for 'GET tasks/:id' endpoint
-export const GetTaskSchema = z.object({
-  params: z.object({ id: z.number() }),
-});
+export const createTaskSchema = TaskSchema.omit({ id: true, createdAt: true, updatedAt: true, status: true });
+export const updateTaskSchema = TaskSchema.omit({ id: true, createdAt: true, updatedAt: true, image: true });

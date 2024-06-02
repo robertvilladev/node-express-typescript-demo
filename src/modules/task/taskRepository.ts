@@ -1,63 +1,54 @@
-import { Task } from '@modules/task/taskModel';
+import { WithId } from 'mongodb';
 
-/* export const users: User[] = [
-  { id: 1, name: 'Alice', email: 'alice@example.com', age: 42, createdAt: new Date(), updatedAt: new Date() },
-  { id: 2, name: 'Bob', email: 'bob@example.com', age: 21, createdAt: new Date(), updatedAt: new Date() },
-]; */
-
-export const tasks: Task[] = [
-  {
-    id: 1,
-    image: 'https://example.com/image1.png',
-    title: 'Task 1',
-    description: 'Description for Task 1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    completed: false,
-    // dueDate: new Date(),
-  },
-  {
-    id: 2,
-    image: 'https://example.com/image2.png',
-    title: 'Task 2',
-    description: 'Description for Task 2',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    completed: true,
-  },
-];
+import { database } from '@common/database/mongoConfig';
+import { CreateTask, Task, TaskStatusType } from '@modules/task/taskModel';
 
 export const taskRepository = {
   findAllAsync: async (): Promise<Task[]> => {
-    return tasks;
+    return database.collection('tasks').find().toArray() as unknown as Task[];
   },
 
-  findByIdAsync: async (id: number): Promise<Task | null> => {
-    return tasks.find((task) => task.id === id) || null;
+  findByIdAsync: async (id: string): Promise<Task | null> => {
+    const task = await database.collection('tasks').findOne({ id });
+    if (!task) return null;
+    return task as WithId<Task>;
   },
 
-  createAsync: async (task: Task): Promise<Task> => {
-    tasks.push(task);
-    return task;
+  createAsync: async (task: CreateTask): Promise<Task> => {
+    const taskObject: Partial<Task> = {
+      ...task,
+      status: 'PENDING',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    await database.collection('tasks').insertOne(taskObject);
+    return taskObject as Task;
   },
 
-  updateAsync: async (id: number, task: Task): Promise<Task | null> => {
-    const index = tasks.findIndex((task) => task.id === id);
-    if (index === -1) {
-      return null;
-    }
+  updateAsync: async (id: string, task: Task): Promise<Task | null> => {
+    const taskObject: Partial<Task> = {
+      ...task,
+      updatedAt: new Date(),
+    };
 
-    tasks[index] = task;
-    return task;
+    const updatedTask = await database.collection('tasks').findOneAndUpdate({ id }, { $set: taskObject });
+
+    if (!updatedTask) return null;
+    return updatedTask as WithId<Task>;
   },
 
-  deleteAsync: async (id: number): Promise<boolean> => {
-    const index = tasks.findIndex((task) => task.id === id);
-    if (index === -1) {
-      return false;
-    }
+  deleteAsync: async (id: string): Promise<boolean> => {
+    const deletedTask = await database.collection('tasks').deleteOne({ id });
+    return deletedTask.deletedCount === 1;
+  },
 
-    tasks.splice(index, 1);
-    return true;
+  updateCompletedAsync: async (id: string, status: TaskStatusType): Promise<Task | null> => {
+    const updatedTask = await database
+      .collection('tasks')
+      .findOneAndUpdate({ id }, { $set: { status, updatedAt: new Date() } });
+
+    if (!updatedTask) return null;
+    return updatedTask as WithId<Task>;
   },
 };

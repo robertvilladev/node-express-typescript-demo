@@ -1,8 +1,6 @@
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express, { Express } from 'express';
 import helmet from 'helmet';
-import path from 'path';
 import { pino } from 'pino';
 
 import { openAPIRouter } from '@api-docs/openAPIRouter';
@@ -13,11 +11,6 @@ import requestLogger from '@common/middleware/requestLogger';
 import { getCorsOrigin } from '@common/utils/envConfig';
 import { healthCheckRouter } from '@modules/healthCheck/healthCheckRouter';
 import { taskRouter } from '@modules/task/taskRouter';
-
-dotenv.config({
-  path: path.resolve(__dirname, '../.env'),
-});
-
 const logger = pino({ name: 'server start' });
 const app: Express = express();
 const corsOrigin = getCorsOrigin();
@@ -29,6 +22,10 @@ app.use(rateLimiter);
 
 // Request logging
 app.use(requestLogger());
+
+// Body parsers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use(ENDPOINTS.HEALTH_CHECK.BASE, healthCheckRouter);

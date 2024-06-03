@@ -14,7 +14,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@asteasolutions/zod-to-openapi": "^6.4.0",
+    "@asteasolutions/zod-to-openapi": "^7.0.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",

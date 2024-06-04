@@ -1,4 +1,4 @@
-# 🚀 Express TypeScript Boilerplate 2024
+# 🚀 node-express-typescript-demo
 
 [![Docker Image CI](https://github.com/edwinhern/express-typescript-2024/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/docker-image.yml)
 [![CodeQL](https://github.com/edwinhern/express-typescript-2024/actions/workflows/codeql.yml/badge.svg)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/codeql.yml)
@@ -40,7 +40,7 @@ Developed to streamline backend development, this boilerplate is your solution f
 
 ### Step 1: 🚀 Initial Setup
 
-- Clone the repository: `git clone https://github.com/edwinhern/express-typescript-2024.git`
+- Clone the repository: `git clone https://github.com/robertvilladev/node-express-typescript-demo.git`
 - Navigate: `cd express-typescript-2024`
 - Install dependencies: `npm ci`
 
@@ -55,36 +55,6 @@ Developed to streamline backend development, this boilerplate is your solution f
 - Building: `npm run build`
 - Production Mode: `npm run start` or `npm run docker:start`
 
-## 📁 Project Structure
-```
-.
-├── api-docs
-│   ├── openAPIDocumentGenerator.ts
-│   ├── openAPIResponseBuilders.ts
-│   └── openAPIRouter.ts
-├── common
-│   ├── middleware
-│   │   ├── errorHandler.ts
-│   │   ├── rateLimiter.ts
-│   │   └── requestLogger.ts
-│   ├── models
-│   │   └── serviceResponse.ts
-│   └── utils
-│       ├── commonValidation.ts
-│       ├── envConfig.ts
-│       └── httpHandlers.ts
-├── index.ts
-├── modules
-│   ├── healthCheck
-│   │   └── healthCheckRouter.ts
-│   └── user
-│       ├── userModel.ts
-│       ├── userRepository.ts
-│       ├── userRouter.ts
-│       └── userService.ts
-└── server.ts
-
-9 directories, 17 files
 ```
 
 ## 🤝 Feedback and Contributions

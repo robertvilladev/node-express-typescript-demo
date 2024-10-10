@@ -61,4 +61,24 @@ export const taskService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
+
+  update: async (id: string, task: Task): Promise<ServiceResponse<Task | null>> => {
+    try {
+      const foundTask = await taskRepository.findByIdAsync(id);
+      if (!foundTask) {
+        return new ServiceResponse(ResponseStatus.Failed, `Task with id ${id} not found`, null, StatusCodes.NOT_FOUND);
+      }
+
+      const taskData = { ...foundTask, ...task };
+      const updatedTask = await taskRepository.updateAsync(id, taskData);
+      if (!updatedTask) {
+        return new ServiceResponse(ResponseStatus.Failed, `Task with id ${id} not found`, null, StatusCodes.NOT_FOUND);
+      }
+      return new ServiceResponse<Task>(ResponseStatus.Success, 'Task updated', updatedTask, StatusCodes.OK);
+    } catch (ex) {
+      const errorMessage = `Error updating task: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  },
 };

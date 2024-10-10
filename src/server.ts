@@ -21,7 +21,7 @@ app.use(helmet());
 app.use(rateLimiter);
 
 // Request logging
-app.use(requestLogger());
+app.use(requestLogger({ level: 'silent' }));
 
 // Body parsers
 app.use(express.json());
@@ -32,7 +32,7 @@ app.use(ENDPOINTS.HEALTH_CHECK.BASE, healthCheckRouter);
 app.use(ENDPOINTS.TASKS.BASE, taskRouter);
 
 // Swagger UI
-app.use(openAPIRouter);
+app.use('/api-docs', openAPIRouter);
 
 // Error handlers
 app.use(errorHandler());

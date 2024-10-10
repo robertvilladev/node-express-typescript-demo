@@ -1,4 +1,4 @@
-import { WithId } from 'mongodb';
+import { ObjectId, WithId } from 'mongodb';
 
 import { database } from '@common/database/mongoConfig';
 import { CreateTask, Task, TaskStatusType } from '@modules/task/taskModel';
@@ -9,7 +9,10 @@ export const taskRepository = {
   },
 
   findByIdAsync: async (id: string): Promise<Task | null> => {
-    const task = await database.collection('tasks').findOne({ id });
+    const task = await database.collection('tasks').findOne({
+      _id: new ObjectId(id),
+    });
+
     if (!task) return null;
     return task as WithId<Task>;
   },
@@ -17,7 +20,7 @@ export const taskRepository = {
   createAsync: async (task: CreateTask): Promise<Task> => {
     const taskObject: Partial<Task> = {
       ...task,
-      status: 'PENDING',
+      status: 'NEW',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -28,14 +31,27 @@ export const taskRepository = {
 
   updateAsync: async (id: string, task: Task): Promise<Task | null> => {
     const taskObject: Partial<Task> = {
-      ...task,
+      image: task.image,
+      title: task.title,
+      status: task.status,
       updatedAt: new Date(),
+      createdAt: task.createdAt,
+      description: task.description,
     };
 
-    const updatedTask = await database.collection('tasks').findOneAndUpdate({ id }, { $set: taskObject });
-
+    const updatedTask = await database.collection('tasks').findOneAndUpdate(
+      {
+        _id: new ObjectId(id),
+      },
+      { $set: taskObject }
+    );
     if (!updatedTask) return null;
-    return updatedTask as WithId<Task>;
+
+    const updatedTaskObject = await database.collection('tasks').findOne({
+      _id: new ObjectId(id),
+    });
+
+    return updatedTaskObject as WithId<Task>;
   },
 
   deleteAsync: async (id: string): Promise<boolean> => {
